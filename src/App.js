@@ -14,10 +14,12 @@ import React, {useState} from "react";
 
 
 function CardTemplate({key, coverimg, title, text, button_text}) {
+    const [c, setC] = useState('')
+    coverimg.resolve().then((cover) => setC(cover.url))
   return (
       <Col>
           <Card style={{ width: '18rem' }} key={key}>
-            <Card.Img variant="top" src={coverimg} />
+            <Card.Img variant="top" src={ c } />
             <Card.Body>
               <Card.Title>{title}</Card.Title>
               <Card.Text>
@@ -38,17 +40,17 @@ let hasChanged = false;
 function DisplayManga() {
     const [list, setList] = useState(null);
     const [title, setTitle] = useState('');
-    hasChanged = true;
 
-
-
-    Manga.search({
-        title: title,
-        limit: 10,
-        hasAvailableChapters: true, }).then(mangas => {
+    if (hasChanged) {
+        Manga.search({
+            title: title,
+            limit: 10,
+            hasAvailableChapters: true, }).then(mangas => {
             setList(mangas)
 
-    }).catch(e=> console.log(e))
+        }).catch(e=> console.log(e))
+        hasChanged = false;
+    }
 
     return (
         <>
@@ -62,6 +64,7 @@ function DisplayManga() {
                         if (e.key === 'Enter') {
                             e.preventDefault()
                             setTitle(e.target.value)
+                            hasChanged = true;
                         }
 
                     }}
@@ -72,8 +75,9 @@ function DisplayManga() {
         <Container>
             <Row>
                 { list != null ?
-                    list.map(({id, localTitle, description}) =>
+                    list.map(({id, localTitle, description, mainCover}) =>
                         <CardTemplate
+                            coverimg = {mainCover}
                             key={id}
                             title={localTitle}
                             text={ description.en }
