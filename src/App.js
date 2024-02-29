@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import { Button } from "react-bootstrap";
 import { Card } from "react-bootstrap";
@@ -8,18 +7,17 @@ import { Col } from "react-bootstrap";
 import { Form } from "react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import {Manga, resolveArray} from "mangadex-full-api";
-import {getValue} from "@testing-library/user-event/dist/utils";
+import {Manga} from "mangadex-full-api";
 import React, {useState} from "react";
 
 
 function CardTemplate({key, coverimg, title, text, button_text}) {
-    const [c, setC] = useState('')
-    coverimg.resolve().then((cover) => setC(cover.url))
+    const [cardCover, setCardCover] = useState('')
+    coverimg.resolve().then((cover) => setCardCover(cover.url))
   return (
       <Col>
           <Card style={{ width: '18rem' }} key={key}>
-            <Card.Img variant="top" src={ c } />
+            <Card.Img variant="top" src={ cardCover } />
             <Card.Body>
               <Card.Title>{title}</Card.Title>
               <Card.Text>
@@ -32,14 +30,10 @@ function CardTemplate({key, coverimg, title, text, button_text}) {
   );
 }
 
-let hasChanged = false;
-// function titleChanger(title) {
-//     DisplayManga(title);
-// }
-
 function DisplayManga() {
     const [list, setList] = useState(null);
     const [title, setTitle] = useState('');
+    let hasChanged = false;
 
     if (hasChanged) {
         Manga.search({
@@ -98,35 +92,8 @@ function App() {
   return (
     <div className="App">
 
-
-        {/*<Container>*/}
-        {/*    <Row>*/}
-        {/*        /!*<CardTemplate*!/*/}
-        {/*        /!*    coverimg= 'guidephoto_alegria.jpg'*!/*/}
-        {/*        /!*    title= "Bali"*!/*/}
-        {/*        /!*    text="A place to visit in Indonesia. Hopefully it's good."*!/*/}
-        {/*        /!*    button_text="More Info"></CardTemplate>*!/*/}
-        {/*        /!*<CardTemplate*!/*/}
-        {/*        /!*    coverimg= 'guidephoto_alegria.jpg'*!/*/}
-        {/*        /!*    title= "China"*!/*/}
-        {/*        /!*    text="Wonderful place in the east, with beautiful landscapes."*!/*/}
-        {/*        /!*    button_text="More Info"></CardTemplate>*!/*/}
-        {/*        /!*<CardTemplate*!/*/}
-        {/*        /!*    coverimg= 'guidephoto_alegria.jpg'*!/*/}
-        {/*        /!*    title= "Wakayama"*!/*/}
-        {/*        /!*    text="Japan's premiere waterfall destination"*!/*/}
-        {/*        /!*    button_text="More Info"></CardTemplate>*!/*/}
-
-        {/*        <listdisplay></listdisplay>*/}
-
-        {/*    </Row>*/}
-        {/*</Container>*/}
-
-        {/*{hasChanged === false ?*/}
-        {/*    <p>No manga here</p>*/}
-        {/*    :*/}
             <DisplayManga></DisplayManga>
-        {/*}*/}
+
     </div>
   );
 }
