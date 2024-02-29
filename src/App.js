@@ -11,15 +11,19 @@ import {Manga} from "mangadex-full-api";
 import React, {useState} from "react";
 
 
-function CardTemplate({key, coverimg, title, text, button_text}) {
+function CardTemplate({key, coverimg, title, author, text, button_text}) {
     const [cardCover, setCardCover] = useState('')
+    const [mAuthor, setMAuthor] = useState('')
+
     coverimg.resolve().then((cover) => setCardCover(cover.url))
+    author[0].resolve().then((author) => setMAuthor(author.name))
   return (
       <Col>
-          <Card style={{ width: '18rem' }} key={key}>
+          <Card className="m-2" style={{ width: '18rem' }} key={key}>
             <Card.Img variant="top" src={ cardCover } />
             <Card.Body>
               <Card.Title>{title}</Card.Title>
+              <Card.Subtitle className="mb-2 text-muted">{mAuthor}</Card.Subtitle>
               <Card.Text>
                 {text}
               </Card.Text>
@@ -30,10 +34,10 @@ function CardTemplate({key, coverimg, title, text, button_text}) {
   );
 }
 
+let hasChanged = false;
 function DisplayManga() {
     const [list, setList] = useState(null);
     const [title, setTitle] = useState('');
-    let hasChanged = false;
 
     if (hasChanged) {
         Manga.search({
@@ -67,14 +71,14 @@ function DisplayManga() {
         </Form>
 
         <Container>
-            <Row>
+            <Row className="">
                 { list != null ?
-                    list.map(({id, localTitle, description, mainCover}) =>
+                    list.map(({id, localTitle, authors, mainCover}) =>
                         <CardTemplate
                             coverimg = {mainCover}
                             key={id}
                             title={localTitle}
-                            text={ description.en }
+                            author={ authors }
                             button_text="Read"
                         ></CardTemplate> )
                     :
